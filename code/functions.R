@@ -1,3 +1,13 @@
+require(bit64)        ## recommended add-on for data.table
+require(data.table)   ## used for data manipulation
+require(moments)      ## used to calculate skewness and kurtosis
+require(ggplot2)      ## plotting
+require(h2o)
+require(pROC)
+require(corrplot)
+require(polycor)
+require(lubridate)
+
 dTail = function(cols, DT) {
   ## Computes stats useful for right-skewed, heavy-tailed, zero-inflated variables
   ## args: cols = character vector of column names
@@ -46,5 +56,40 @@ h2o_auc_in_grid <- function(grid){
     auc[i] <- h2o.auc(grid_models[[i]])
   }
   return(auc)
+}
+
+top_n<-function(dt, keycols, freqcol, outcol='freq', n=1, descending=F, col_suffix=NULL){
+  combinedKeys = c(keycols, freqcol)
+  numberOfSlots = seq(1, n)
+  dt_freq = dt[, list(hfreq=.N), by= eval(combinedKeys)]
+  top_freq = dt_freq[,.SD[order(hfreq, decreasing=descending)[numberOfSlots]], by=eval(keycols)]
+  top_freq[, variable:=seq(1,n)]
+  setnames(top_freq, "hfreq", outcol)
+  #add suffix to the freqcol and outcol if set 
+  oriNames = c(freqcol, outcol)
+  if(!is.null(col_suffix)){
+    newNames = paste(oriNames, col_suffix, sep="_")
+    setnames(top_freq, oriNames, newNames)
+  }else{
+    newNames = oriNames
+  }
+  dcast_formula = paste(paste(keycols, collapse ="+"), "variable", sep="~")
+  top_n_freq = dcast(top_freq, dcast_formula, value.var = newNames)
+  return(top_n_freq)
+}
+
+tz_transfer<-function(dt, cname, oname='formated_dt', format='ymd_hms', ori_tz = 'EST5EDT', tar_tz='CST6CDT', remove_ori = T){
+  # EASE table uses EST as timezone(tz), set accordingly
+  if(format == 'ymd_hms'){
+    dt[, (oname):=ymd_hms(get(cname),tz=ori_tz)]
+    
+  }else if(format=='ymd'){
+    dt[, (oname):=ymd(get(cname), tz=ori_tz)]
+    
+  }
+  dt[, (oname):= with_tz(get(oname), tzone=target_tz)]
+  if(remove_ori==T){
+    dt[, (cname):=NULL, with=F]
+  }
 }
 
