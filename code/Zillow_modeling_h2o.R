@@ -61,3 +61,13 @@ grid <- h2o.grid(algorithm="gbm",
                  keep_cross_validation_predictions=T,
                  seed=12345
 )
+
+h2oglm1 = h2o.glm(x=setdiff(colnames(readyForH2o), c(ycol)),
+                  y=ycol,
+                  training_frame = input,
+                  nfolds = 5,
+                  family = c("gaussian")
+                  )
+
+p = 1- pchisq(2421.398, 90810)
+p

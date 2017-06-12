@@ -79,7 +79,7 @@ gbmGrid <-  expand.grid(interaction.depth = c(1, 5, 9),
 
 gbmFit1 <- train(formula , data = training, 
                  method = "gbm", 
-                 preProcess = c("center", "scale"),
+                 #preProcess = c("center", "scale"),
                  trControl = fitControl,
                  #tuneGrid = gbmGrid,
                  verbose = FALSE)
