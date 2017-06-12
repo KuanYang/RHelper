@@ -8,6 +8,10 @@ require(corrplot)
 require(polycor)
 require(lubridate)
 
+pcNAs = function(DT) {
+  DT[, list(name = colnames(.SD),class=lapply(.SD, class), pcNA=100*colMeans(is.na(.SD)))]
+}
+
 dTail = function(cols, DT) {
   ## Computes stats useful for right-skewed, heavy-tailed, zero-inflated variables
   ## args: cols = character vector of column names
