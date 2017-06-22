@@ -4,7 +4,7 @@
 \alias{create_mi}
 \title{Create missing indicator for cols in a data.table}
 \usage{
-create_mi(dt, cols = colnames(dt), suffix = "_mi", detect = F)
+create_mi(dt, cols = colnames(dt), suffix = "_mi", detect = c(F, T))
 }
 \arguments{
 \item{dt}{a data.table}
