@@ -1,0 +1,15 @@
+Package: KuansHelper
+Type: Package
+Title: A collections of Helper functions used in my projects.
+Version: 0.1.0
+Author: Kuan Ynag
+Maintainer: Kuan Yang <kuan.yang.data@gmail.com>
+Description: This package contains functions that I use for some of my projects.
+License: GPL
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: data.table, moments
