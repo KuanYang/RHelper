@@ -29,7 +29,8 @@ dTail = function(cols, DT) {
 #'
 #'
 #' @export
-create_mi <-function(dt, cols=colnames(dt), suffix='_mi', detect=F){
+create_mi <-function(dt, cols=colnames(dt), suffix='_mi', detect=c(F, T)){
+  detect<-match.arg(detect)
   if(detect){
     NAs = col[sapply(cols, function(x) anyNA(dt[,get(x)]))]
     col = names(NAs[NAs==TRUE])
@@ -37,3 +38,4 @@ create_mi <-function(dt, cols=colnames(dt), suffix='_mi', detect=F){
   dt[, eval(paste0(eval(cols), suffix)):=lapply(.SD, is.na), .SDcols = cols ]
   dt[, eval(paste0(eval(cols), suffix)):=lapply(.SD, as.integer), .SDcols = paste0(cols, suffix) ]
 }
+
